@@ -4,3 +4,5 @@ This repository contains the latex code for my mini-thesis which I undertook as 
 ## Acessing the final report
 Refer to the file `Thesis.pdf` or my [projects website](https://average-engineer.github.io/Projects-Website-Ashutosh-Mukherjee/), for accessing the thesis in its final form.
 
+## Running the latex script
+The main executable script is `Thesis.tex`, while the various styles and packages used for this report can be found in `igm.sty` (prescribed latex template from IGMR).
