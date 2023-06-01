@@ -1,0 +1,146 @@
+% Formula symbols
+
+\newcommand{\acrounit}[1]{
+\acroextra{\makebox[18mm][l]{\si{#1}}}
+}
+
+\chapter*{\multilang{Formelzeichen und Indizes}{Formula symbols and indices}}
+
+% Headmarks need to be enforced in every chapter*
+\ihead[]{\multilang{Formelzeichen und Indizes}{Formula symbols and indices}}
+
+% A list of all content has to be enforced in every chapter*
+\addcontentsline{toc}{chapter}{\multilang{Formelzeichen und Indizes}{Formula symbols and indices}}
+
+\section*{\multilang{Formelzeichen aus lateinischen Kleinbuchstaben}{Lower case latin letters as formula symbols}}
+\begin{acronym}[LONGEST]
+	\acro{n}[\ensuremath{n}]{\acrounit{-}number of simulation time-steps}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{d}[\ensuremath{\mathbf{d}}]{\acrounit{-}Vector of generalized imbalance forces}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{dx}[\ensuremath{d_x}]{\acrounit{\N}Net imbalance force on CF Bike along X-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{dy}[\ensuremath{d_y}]{\acrounit{\N}Net imbalance force on CF Bike along Y-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{dz}[\ensuremath{d_z}]{\acrounit{\N-m}Net imbalance torque on CF Bike about Z-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{y}[\ensuremath{\mathbf{y}}]{\acrounit{-}Vector of CF Bike CoG generalized coordinates}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{u}[\ensuremath{\mathbf{u}}]{\acrounit{-}Vector of generalized controller forces/actuation effort}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{ux}[\ensuremath{u_x}]{\acrounit{\N}Controller force at CF Bike CoG along X-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{uy}[\ensuremath{u_y}]{\acrounit{\N}Controller force at CF Bike CoG along Y-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{uz}[\ensuremath{u_z}]{\acrounit{\N-m}Controller torque at CF Bike CoG about Z-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{s}[\ensuremath{s}]{\acrounit{-}Laplace domain variable}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{x}[\ensuremath{\mathbf{x}}]{\acrounit{-}State vector}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{rfh}[\ensuremath{\mathbf{r}_{FH}}]{\acrounit{\m}Moment arm of excitations on Fronthub}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{rrh}[\ensuremath{\mathbf{r}_{RH}}]{\acrounit{\m}Moment arm of excitations on Rearhub}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{rh}[\ensuremath{\mathbf{r}_{H}}]{\acrounit{\m}Moment arm of excitations on Handlebar}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{rp}[\ensuremath{\mathbf{r}_{P}}]{\acrounit{\m}Moment arm of excitations on Pedals}
+\end{acronym}
+
+
+\section*{\multilang{Formelzeichen aus lateinischen Großbuchstaben}{Upper case latin letters as formula symbols}}
+\begin{acronym}[LONGEST]
+	\acro{Ci}[\ensuremath{C}]{\acrounit{\N}Force values from CF loadcase}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Ri}[\ensuremath{R}]{\acrounit{\N}Force values from RS loadcase}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Ki}[\ensuremath{K}]{\acrounit{-}Feedback controller gain}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{K}[\ensuremath{\mathbf{K}}]{\acrounit{-}Feedback controller transfer function matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Kd}[\ensuremath{\mathbf{K}_d}]{\acrounit{-}Feedforward controller gain matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{G}[\ensuremath{\mathbf{G}}]{\acrounit{-}Plant transfer function matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Gd}[\ensuremath{\mathbf{G}_d}]{\acrounit{-}Disturbance dynamics transfer function matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Gcf}[\ensuremath{\mathbf{G}_{CF}}]{\acrounit{-}Transfer function representation of the linearized CF Bike}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{I}[\ensuremath{\mathbf{I}}]{\acrounit{-}Identity matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{A}[\ensuremath{\mathbf{A}}]{\acrounit{-}System matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{B}[\ensuremath{\mathbf{B}}]{\acrounit{-}Input matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{C}[\ensuremath{\mathbf{C}}]{\acrounit{-}Output matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{D}[\ensuremath{\mathbf{D}}]{\acrounit{-}Feedthrough matrix}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Ffh}[\ensuremath{\mathbf{F}_{FH}}]{\acrounit{\N}Vector of excitations on Fronthub}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Frh}[\ensuremath{\mathbf{F}_{RH}}]{\acrounit{\N}Vector of excitations on Rearhub}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Fh}[\ensuremath{\mathbf{F}_{H}}]{\acrounit{\N}Vector of excitations on Handlebar}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{Fp}[\ensuremath{\mathbf{F}_{P}}]{\acrounit{\N}Vector of excitations on Pedals}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{FX}[\ensuremath{FX}]{\acrounit{\N}Force along X-axis of inertial frame of reference}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{FY}[\ensuremath{FY}]{\acrounit{\N}Force along Y-axis of inertial frame of reference}
+\end{acronym}
+
+
+\section*{\multilang{Formelzeichen aus griechischen Kleinbuchstaben}{Lower case greek letters as formula symbols}}
+\begin{acronym}[LONGEST]
+\acro{gamma}[\ensuremath{\gamma}]{\acrounit{rad}Angular position of CG Bike about the Z-axis}
+\end{acronym}
+
+\section*{\multilang{Indizes}{Indices}}
+\begin{acronym}[LONGEST]
+\acro{in_a}[\ensuremath{a}]{Amplitude}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{in_i}[\ensuremath{i}]{Time-step number}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{in_x}[\ensuremath{x}]{Component along X-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{in_y}[\ensuremath{y}]{Component along Y-axis}
+\end{acronym}
+\begin{acronym}[LONGEST]
+	\acro{in_z}[\ensuremath{z}]{Component along Z-axis}
+\end{acronym}

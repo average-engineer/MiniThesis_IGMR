@@ -1,0 +1,37 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {\relax 1.1}{\ignorespaces SAA Workflow\relax }}{1}{figure.caption.9}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {\relax 2.1}{\ignorespaces Various Loadcases in SAA\relax }}{3}{figure.caption.10}
+\contentsline {figure}{\numberline {\relax 2.2}{\ignorespaces Validation of SAA\relax }}{4}{figure.caption.11}
+\contentsline {figure}{\numberline {\relax 2.3}{\ignorespaces Loads Workflow\relax }}{5}{figure.caption.13}
+\contentsline {figure}{\numberline {\relax 2.4}{\ignorespaces Control System Setup\relax }}{5}{figure.caption.14}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {\relax 3.1}{\ignorespaces Net Imbalance force and torque on CF Bike\relax }}{7}{figure.caption.15}
+\contentsline {figure}{\numberline {\relax 3.2}{\ignorespaces Pure feedforward Control\relax }}{7}{figure.caption.16}
+\contentsline {figure}{\numberline {\relax 3.3}{\ignorespaces Loads at point B of CF under pure feedforward control\relax }}{8}{figure.caption.17}
+\contentsline {figure}{\numberline {\relax 3.4}{\ignorespaces Classical Feedback Control\relax }}{9}{figure.caption.19}
+\contentsline {figure}{\numberline {\relax 3.5}{\ignorespaces Loads at point A of CF under PD Feedback Control\relax }}{9}{figure.caption.23}
+\contentsline {figure}{\numberline {\relax 3.6}{\ignorespaces Loads at point B of CF under PD Feedback Control\relax }}{10}{figure.caption.24}
+\contentsline {figure}{\numberline {\relax 3.7}{\ignorespaces Loads at point C of CF under PD Feedback Control\relax }}{10}{figure.caption.25}
+\contentsline {figure}{\numberline {\relax 3.8}{\ignorespaces Comparison of Controller Effort and Net Imbalance on CF\relax }}{11}{figure.caption.30}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {\relax 4.1}{\ignorespaces Contribution of Bike Inertia to the total inertia for a 45 Kg Rider.\relax }}{14}{figure.caption.31}
+\contentsline {figure}{\numberline {\relax 4.2}{\ignorespaces Added inertia effect to the force experienced by Damper from Rear-frame.\relax }}{15}{figure.caption.32}
+\contentsline {figure}{\numberline {\relax 4.3}{\ignorespaces Added inertia effect to the force experienced by Rear-frame from Front-frame.\relax }}{16}{figure.caption.33}
+\contentsline {figure}{\numberline {\relax 4.4}{\ignorespaces Noisy Measured Loads with random uncertainties\relax }}{17}{figure.caption.38}
+\contentsline {figure}{\numberline {\relax 4.5}{\ignorespaces Loads at point B of CF with PD Control and Measurement Noise\relax }}{18}{figure.caption.40}
+\contentsline {figure}{\numberline {\relax 4.6}{\ignorespaces Loads workflow with noise and filtering\relax }}{19}{figure.caption.45}
+\contentsline {figure}{\numberline {\relax 4.7}{\ignorespaces Noisy Measured Loads passed through a Low-Pass Butterworth Filter (15 Hz Cut-off)\relax }}{20}{figure.caption.46}
+\contentsline {figure}{\numberline {\relax 4.8}{\ignorespaces Loads at point B of CF with PD Control and Measurement Noise filtered at 15 Hz Cut-off Frequency\relax }}{21}{figure.caption.48}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {\relax 5.1}{\ignorespaces Pre-Control\relax }}{22}{figure.caption.52}
+\contentsline {figure}{\numberline {\relax 5.2}{\ignorespaces Imbalance anticipation\relax }}{23}{figure.caption.53}
+\contentsline {figure}{\numberline {\relax 5.3}{\ignorespaces Loads at point A of CF with no Z Feedback and Pre-control\relax }}{26}{figure.caption.63}
+\contentsline {figure}{\numberline {\relax 5.4}{\ignorespaces Loads at point B of CF with no Z Feedback and Pre-control\relax }}{26}{figure.caption.64}
+\contentsline {figure}{\numberline {\relax 5.5}{\ignorespaces Loads at point C of CF with no Z Feedback and Pre-control\relax }}{27}{figure.caption.65}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {\relax 6.1}{\ignorespaces Ideal Disturbance Rejection\relax }}{28}{figure.caption.69}
+\addvspace {10\p@ }

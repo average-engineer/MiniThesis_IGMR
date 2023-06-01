@@ -1,0 +1,249 @@
+\changefontsizes{20pt}
+\chapter{Initial Controller Design}
+\label{cha:chap3}
+\changefontsizes{12pt}
+For the controller design, it is imperitive that a concrete control objective is set so that controller performance can be judged. The CF Bike is the plant for our control system and it is a MIMO (Multi-input, Multi-output) system. The inputs of our plant are the X-Y Planar forces and torque about Z axis, applied at the centre of gravity of the bike. The outputs are the translational positions of the bike and the rotation of the bike. Since each output would be coupled with other inputs (for example, the translation position of the bike would depend on the planar control forces and the control torque as well), our plant is quite interative. Irrespective of that, we use \emph{Decentralized Control}, i.e. the MIMO system is treated as three independent SISO systems.
+
+% --------------------------------------------------------------------------
+% 		Section 3.1
+% --------------------------------------------------------------------------
+\section{Control Objective}
+\label{sec:chap3sec1}
+The control objective is derived from the aim of SAA: mimicing the behaviour of the actual bike ride (or the reference simulation ride) using control. Thus, our primary control performance parameters will be the closeness of CF and RS bike loads at the validation points mentioned in section \ref{sec:kap2ab2}.
+Thus, we are not necessarily very bothered about the traditional control system performance criteria like overshoot and other time domain peformance characteristics for regulation. Moreover, while using classical control methods, our tuning of the controller parameters can't include tradional tuning strategies like open/closed-loop shaping since reducing regulation/tracking error is not our goal. 
+Thus, as the first iteration, imbalance compensation is attempted. Since the CF Bike experiences external excitations, there will be some net imbalance created, both translational and rotational, on the bike frame. The net rotational imbalance can be modelled as shown in Figure \ref{fig:imbalance1}.
+\begin{figure}[h!]
+	\centering
+	\input{Contents/Resources/netImbalance}
+	\caption{Net Imbalance force and torque on CF Bike}
+	\label{fig:imbalance1}
+\end{figure}
+ It is important to note that the moment arm for each corresponding force will continuously change during the reference ride due to various inter-moving elements of the bike (for example, fork translates with respect to the front frame due to a spring connecting the two). For the control design in this thesis, which depends on a simulation reference, it is quite easy to extract the time variance of each moment arm, but when the loads are measured on the actual bike, recording the changing moving arms requires usage of additional sensors like IMUs which would record the position change of the different components of the bike. Keeping in mind economic feasibility and using minimal amount of sensors, this might be not the most suitable option. In such a scenario, an alternative is to measure the moment arms when the bike is static, and then assume that the change in the moment arms with time is negligible. The error in the actual imbalance on the bike and the imbalance estimated would then depend on various factors like the terrain and the manner of riding the bike, which would naturally affect the change of moment arms.
+
+
+% --------------------------------------------------------------------------
+% 		Section 3.2
+% --------------------------------------------------------------------------
+\section{Pure Feedforward for Imbalance Compensation}
+\label{sec:chap3sec2}
+A decentralized feedforward controller is used to feed in the negative of the imbalances estimated as shown in Figure \ref{fig:feedfwd}. The idea is to compensate whatever net imbalance is created from the excitations provided to the CF Bike.
+
+It is quite clear from Figure \ref{fig:pureFeedFwdB}, which compares the loads from CF and RS bikes at point B, that such an approach is infact quite unsuitable. The bike frame becomes completely unstable in 3D space as a result of which its rotation degree of freedom explodes and hence the RS Bike forces are reflected very poorly. One plausible explanation for this would be the application method of the feedforward control forces on the CF Bike, which are localised only on the center of gravity of the bike. On the contrary, the excitations from the RS Bike are fed to the CF Bike at different discrete points with a given eccentricity from the center of gravity. In such a load application configuration, it might be possible that the expected compensation is not happening properly and the feedforward control forces are acting as additional excitations to the unconstrained CF Bike, hence inducing its uncontrollable and unstable movement in 3D space.
+Thus, we can conclude that a basic position control using feedback may be necessary in order to maintain the stability of the CF Bike in 3D space.
+\begin{figure}[h!]
+  \centering
+  \tikzstyle{block}     = [draw, rectangle, minimum height=1.5cm, minimum width=1.6cm]
+    \tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=1mm, fill=black, draw=black]
+    \tikzstyle{connector} = [->, thick]
+    \tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+    \tikzstyle{inout}     = []
+    \tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+    \begin{tikzpicture}[auto, node distance=3cm, >=stealth']
+      \node[block] (bike) {CF};
+      \node[block, left of = bike] (feedfwd) {$\begin{matrix}
+      -1&0&0\\
+      0&-1&0\\
+      0&0&-1
+      \end{matrix}$};
+      \node[inout,right of = bike] (y) {\textbf{y}};
+      \node[inout,left of = feedfwd] (d) {\textbf{d}};
+
+      \draw[connector] (d) -- (feedfwd);
+      \draw[connector] (feedfwd) -- (bike);
+      \draw[connector] (bike) -- (y);
+    \end{tikzpicture}
+	  \caption{Pure feedforward Control}
+    \label{fig:feedfwd}
+\end{figure}
+
+
+\begin{figure}[h!]
+     \centering
+     \scalebox{1.0}{
+     \begin{tikzpicture}
+        \input{Contents/Resources/PureFeedFwd/FrontFrameFork}
+    \end{tikzpicture}}
+    \caption{Loads at point B of CF under pure feedforward control}
+    \label{fig:pureFeedFwdB}
+\end{figure}
+
+
+
+% --------------------------------------------------------------------------
+% 		Section 3.3
+% --------------------------------------------------------------------------
+\section{Classical Feedback Control}
+\label{sec:chap3sec3}
+Figure \ref{fig:feedback} shows a decentralized feedback controller which generates the controller effort based on the output of the plant; the translational and angular position coordinates of the CF Bike. It is important to note that a positive feedback is used due to certain constraints in Simpack, and for now regulation is attempted, i.e. the reference position is zero. 
+
+\subsection*{PD Control}
+The feedback controller is set such that:
+$$K_x = K_y = K_z = 100 + 500s$$
+
+The tuning of the controller is done such that the derivative control is sufficiently high so as to increase the response speed and to counter imbalances with higher rates of change. The validation results can be visualized in Figures \ref{fig:pureFeedbkPDA} to \ref{fig:pureFeedbkPDC}, while the errors between CF and RS has been quantified in Tables \ref{tab:pureFeedbkPDA} to \ref{tab:pureFeedbkPDC}. 
+
+\begin{figure}[h]
+	\centering
+	\tikzstyle{block}     = [draw, rectangle, minimum height=1.5cm, minimum width=1.6cm]
+	\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=0.01mm, fill=black, draw=black]
+	\tikzstyle{connector} = [->, thick]
+	\tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+	\tikzstyle{inout}     = []
+	\tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+	\begin{tikzpicture}[auto, node distance=3cm, >=stealth']
+		\node[block] (bike) {CF};
+		\node[block, left of = bike] (PD) {$\begin{matrix}
+				K_x&&\\
+				&K_y&\\
+				&&K_z
+			\end{matrix}$};
+		\node[inout,right of = bike] (y) {\textbf{y}};
+		\node[sum,left of = PD] (s) {};
+		\node[branch,right of = bike,node distance = 1.5cm] (b1) {};
+		\node[branch,below of = b1] (b2) {};
+		
+		\draw[connector] (PD) -- node{\textbf{u}} (bike);
+		\draw[connector] (bike) -- (y);
+		\draw[thick] (b1) -- (b2);
+		\draw[connector] (b2) -| (s);
+		\draw[connector] (s) -- (PD);
+	\end{tikzpicture}
+	\caption{Classical Feedback Control}
+	\label{fig:feedback}
+\end{figure}
+
+Thus, PD Control is promising for forces at point B and X component of forces at point A and C, while it shows mediocre performance for Y components of forces at A and C.
+
+ \begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 3&127&0.98\\ 
+		FY & 99&906&0 \\ 
+		\hline
+	\end{tabular}
+	\caption{Error Tabulation of Loads at Point A of CF under PD Feedback Control}
+	\label{tab:pureFeedbkPDA}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 3&15&0.99\\
+		FY&3&2&0.99\\
+		\hline
+	\end{tabular}
+	\caption{Error Tabulation of Loads at Point B of CF under PD Feedback Control}
+	\label{tab:pureFeedbkPDB}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 4&149&0.95\\ 
+		FY & 56&901&0.05 \\ 
+		\hline
+	\end{tabular}
+	\caption{Error Tabulation of Loads at Point C of CF under PD Feedback Control}
+	\label{tab:pureFeedbkPDC}
+\end{table}
+
+\begin{figure}[h!]
+    \centering
+    \scalebox{0.8}{
+    \begin{tikzpicture}
+        \input{Contents/Resources/PureFeedbackPD/RearFrameDamper2}
+    \end{tikzpicture}}
+    \caption{Loads at point A of CF under PD Feedback Control}
+    \label{fig:pureFeedbkPDA}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \scalebox{0.8}{
+    \begin{tikzpicture}
+        \input{Contents/Resources/PureFeedbackPD/FrontFrameFork}
+    \end{tikzpicture}}
+    \caption{Loads at point B of CF under PD Feedback Control}
+    \label{fig:pureFeedbkPDB}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \scalebox{0.8}{
+    \begin{tikzpicture}
+            \input{Contents/Resources/PureFeedbackPD/RearFrameFrontFrame}
+    \end{tikzpicture}}
+    \caption{Loads at point C of CF under PD Feedback Control}
+    \label{fig:pureFeedbkPDC}
+\end{figure}
+
+
+\subsection*{PID Control}
+Next, a PID Controller is tried with small integral action and the same proportional and derivative quantities. This controller doesn't lead to very significant modifications in the performance of the PD Controller, which might be expected since the integral action activates on the basis of accumulation of error and for a small intergral gain value, the contribution from the integral action has quite a small effect. To observe some sort of changes in the performance, so as to get a better idea of whether the integral action is at all helpful, the PID Controller for the angular position of the bike is modified to:
+$$K_z = 10 + 100s + \frac{1000}{s}$$
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 2&114&0.99\\ 
+		FY & 56&488&0.5 \\ 
+		\hline
+	\end{tabular}
+	\caption{Error Tabulation of Loads at Point A of CF under PID Feedback Control with modified Z-Feedback}
+	\label{tab:pureFeedbkPIDA}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 3&14&0.99\\
+		FY&3&2&0.99\\
+		\hline
+	\end{tabular}
+	\caption{Error Tabulation of Loads at Point B of CF under PID Feedback Control with modified Z-Feedback}
+	\label{tab:pureFeedbkPIDB}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 3&101&0.98\\ 
+		FY & 35&516&0.52 \\ 
+		\hline
+	\end{tabular}
+	\caption{Error Tabulation of Loads at Point C of CF under PID Feedback Control with modified Z-Feedback}
+	\label{tab:pureFeedbkPIDC}
+\end{table}
+
+
+It is quite clear from Tables \ref{tab:pureFeedbkPIDA} to \ref{tab:pureFeedbkPIDC} that the Y force components correlation at A and C improves by quite a lot, while the X force components and the forces at B have not very large changes. 
+
+The correlation between the control effort and the imbalances estimated might help in understanding the control requirements. It can be seen in Figure \ref{fig:imbVsCont} that the control effort in X and Y resemble the corresponding imbalances quite a lot. 
+\begin{figure}[h!]
+	\centering
+	\scalebox{1}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/ImbalanceVsControl}
+	\end{tikzpicture}}
+	\caption{Comparison of Controller Effort and Net Imbalance on CF}
+	\label{fig:imbVsCont}
+\end{figure}
+Thus, it seems like the control forces as a result of position control try to recreate the imbalance forces experienced by the bike. It is observed after quite a lot of simulations with different controller parameters that better the correlation between the control forces and the imbalance forces is, better are the loads comparison between CF and RS at the validation points. It is also important to note that it was observed that for all classical PID and PD feedback cases, the control torque was always significantly less than the net imbalance torque experienced by the bike, as seen in Figure \ref{fig:imbVsCont}.

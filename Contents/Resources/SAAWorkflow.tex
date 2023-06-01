@@ -1,0 +1,103 @@
+\tikzstyle{rSensor}    = [draw, rectangle, minimum height=2mm, minimum width=2mm, fill=black, draw=black]
+\tikzstyle{cSensor}    =[draw, diamond, minimum height=0.25mm, minimum width=0.25mm, draw=red]
+\tikzset{->-/.style={decoration={
+				markings,
+				mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+\begin{tikzpicture}
+	%% ROADSURFACE BIKE
+	% Coordinates
+	\coordinate (rh) at (0,0); % Rearhub
+	\coordinate (fh) at (4,0); % Fronthub
+	\coordinate (d1) at ($(rh)!0.25!(fh)$); % (1,0)
+	\coordinate (sb) at ($(d1)!0.33!90:(fh)$); % Seat Bottom
+	\coordinate (st) at ($(d1)!0.5!90:(fh)$); % Seat Top
+	\coordinate (sr) at ($(st)!0.3!90:(sb)$); % Seat Right
+	\coordinate (sl) at ($(st)!0.3!-90:(sb)$); % Seat Left
+	\coordinate (d2) at ($(rh)!0.5!(fh)$); % (2,0)
+	\coordinate (p) at ($(d2)!0.15!-90:(fh)$); % Pedal
+	\coordinate (d3) at ($(rh)!0.875!(fh)$); % (3.5,0)
+	\coordinate (hbb) at ($(d3)!1!-90:(d2)$); % Handlebar Bottom
+	\coordinate (d4) at ($(rh)!0.75!(fh)$); % (3,0)
+	\coordinate (hbt) at ($(d4)!1!-90:(rh)$); % Handlebar Top
+	\coordinate (d5) at ($(fh)!1!90:(d4)$); % (4,-1)
+	\coordinate (d6) at ($(rh)!1!-90:(d2)$); % (0,-1)
+	
+	
+	% Nodes
+	\node[rSensor] at (rh) {}; % Rearhub Sensor
+	\node[rSensor] at (fh) {}; % Fronthub Sensor
+	\node[rSensor] at (hbt) {}; % Handlebar Sensor
+	\node[rSensor] at (p) {}; % Pedal Sensor
+	
+	% wheels
+	\draw[very thick](rh) circle (0.75);
+	\draw[very thick](fh) circle (0.75);
+	
+	% frame and seat
+	\draw (rh) -- (sb) -- (p) -- (rh);
+	\draw (sb) -- (st);
+	\draw (sl) -- (sr);
+	\draw (sb) -- (hbb) -- (fh) -- (p) -- (sb);
+	\draw (hbb) -- (hbt);
+	
+	% road
+	\draw[ultra thick](-1,-1) .. controls (1,-0.3) and (2.5,-3) .. (5,0);
+	
+	% surrounding box
+	\draw[ultra thick](-1.5,-1.5) rectangle (5.5,3.5);
+	
+	% Labels
+	\node[rSensor] at (-1,3) {};
+	\node[text width = 3cm] at (1,3) {Sensors};
+	
+	
+	
+	%% CONTROLLED FRAME BIKE
+	% (shifted by 8 units along X-axis)
+	% Coordinates
+	\coordinate (rh1) at (8,0); % Rearhub
+	\coordinate (fh1) at (12,0); % Fronthub
+	\coordinate (d11) at ($(rh1)!0.25!(fh1)$); % (9,0)
+	\coordinate (sb1) at ($(d11)!0.33!90:(fh1)$); % Seat Bottom
+	\coordinate (st1) at ($(d11)!0.5!90:(fh1)$); % Seat Top
+	\coordinate (sr1) at ($(st1)!0.3!90:(sb1)$); % Seat Right
+	\coordinate (sl1) at ($(st1)!0.3!-90:(sb1)$); % Seat Left
+	\coordinate (d21) at ($(rh1)!0.5!(fh1)$); % (10,0)
+	\coordinate (p1) at ($(d21)!0.15!-90:(fh1)$); % Pedal
+	\coordinate (d31) at ($(rh1)!0.875!(fh1)$); % (11.5,0)
+	\coordinate (hbb1) at ($(d31)!1!-90:(d21)$); % Handlebar Bottom
+	\coordinate (d41) at ($(rh1)!0.75!(fh1)$); % (11,0)
+	\coordinate (hbt1) at ($(d41)!1!-90:(rh1)$); % Handlebar Top
+	\coordinate (d51) at ($(fh1)!1!90:(d41)$); % (12,-1)
+	\coordinate (d61) at ($(rh1)!1!-90:(d21)$); % (8,-1)
+	
+	% Nodes
+	\node[cSensor] at (rh1) {}; % Rearhub Sensor
+	\node[cSensor] at (fh1) {}; % Fronthub Sensor
+	\node[cSensor] at (hbt1) {}; % Handlebar Sensor
+	\node[cSensor] at (p1) {}; % Pedal Sensor
+	
+	% frame and seat 
+	\draw (rh1) -- (sb1) -- (p1) -- (rh1);
+	\draw (sb1) -- (st1);
+	\draw (sl1) -- (sr1);
+	\draw (sb1) -- (hbb1) -- (fh1) -- (p1) -- (sb1);
+	\draw (hbb1) -- (hbt1);
+	
+	% surrounding box
+	\draw[ultra thick](6.5,-1.5) rectangle (13.5,3.5);
+	
+	
+	% Information flow
+	\draw[dotted, ->-=0.5,ultra thick] (hbt) -- (hbt1);
+	\draw[dotted, ->-=0.5,ultra thick] (p) -- (p1);
+	\draw[dotted, ->-=0.25,ultra thick] (rh) -- (d6);
+	\draw[dotted, ->-=0.5,ultra thick] (d6) -- (d61);
+	\draw[dotted, ->-=0.4,ultra thick] (d61) -- (rh1);
+	\draw[dotted, ->-=0.6,ultra thick] (fh) -- (d5);
+	\draw[dotted, ->-=0.4,ultra thick] (d5) -- (d51);
+	\draw[dotted, ->-=0.5,ultra thick] (d51) -- (fh1);
+	
+	\node[text width=4cm] at (9,2.25) {Measured Loads \\ fed as Excitations};
+	
+\end{tikzpicture}

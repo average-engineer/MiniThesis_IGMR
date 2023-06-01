@@ -1,0 +1,251 @@
+\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=0.01mm, fill=black, draw=black]
+\begin{tikzpicture}
+	%% BIKE MODEL (-3 units along X from origin)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Coordinates
+	\coordinate (rh) at (-3,0); % Rearhub
+	\coordinate (fh) at (-1,0); % Fronthub
+	\coordinate (d1) at ($(rh)!0.25!(fh)$); 
+	\coordinate (sb) at ($(d1)!0.33!90:(fh)$); % Seat Bottom
+	\coordinate (st) at ($(d1)!0.5!90:(fh)$); % Seat Top
+	\coordinate (sr) at ($(st)!0.3!90:(sb)$); % Seat Right
+	\coordinate (sl) at ($(st)!0.3!-90:(sb)$); % Seat Left
+	\coordinate (d2) at ($(rh)!0.5!(fh)$); 
+	\coordinate (p) at ($(d2)!0.15!-90:(fh)$); % Pedal
+	\coordinate (d3) at ($(rh)!0.875!(fh)$); 
+	\coordinate (hbb) at ($(d3)!1!-90:(d2)$); % Handlebar Bottom
+	\coordinate (d4) at ($(rh)!0.75!(fh)$); 
+	\coordinate (hbt) at ($(d4)!1!-90:(rh)$); % Handlebar Top
+	\coordinate (d5) at ($(fh)!1!90:(d4)$);
+	\coordinate (d6) at ($(rh)!1!-90:(d2)$); 
+	
+	
+	% frame and seat
+	\draw (rh) -- (sb) -- (p) -- (rh);
+	\draw (sb) -- (st);
+	\draw (sl) -- (sr);
+	\draw (sb) -- (hbb) -- (fh) -- (p) -- (sb);
+	\draw (hbb) -- (hbt);
+	
+	
+	% surrounding box
+	\draw[ultra thick](-3.5,-0.5) rectangle (0,1.75);
+	
+	% Text
+	\node[text width = 3cm] at (-1.5,2) {Bike Model};
+	
+	
+	%% ROADSURFACE MODEL (4 units along X, 5 units along Y from origin)%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Coordinates
+	\coordinate (rhRS) at (4,5); % Rearhub
+	\coordinate (fhRS) at (6,5); % Fronthub
+	\coordinate (d1RS) at ($(rhRS)!0.25!(fhRS)$); 
+	\coordinate (sbRS) at ($(d1RS)!0.33!90:(fhRS)$); % Seat Bottom
+	\coordinate (stRS) at ($(d1RS)!0.5!90:(fhRS)$); % Seat Top
+	\coordinate (srRS) at ($(stRS)!0.3!90:(sbRS)$); % Seat Right
+	\coordinate (slRS) at ($(stRS)!0.3!-90:(sbRS)$); % Seat Left
+	\coordinate (d2RS) at ($(rhRS)!0.5!(fhRS)$); 
+	\coordinate (pRS) at ($(d2RS)!0.15!-90:(fhRS)$); % Pedal
+	\coordinate (d3RS) at ($(rhRS)!0.875!(fhRS)$); 
+	\coordinate (hbbRS) at ($(d3RS)!1!-90:(d2RS)$); % Handlebar Bottom
+	\coordinate (d4RS) at ($(rhRS)!0.75!(fhRS)$); 
+	\coordinate (hbtRS) at ($(d4RS)!1!-90:(rhRS)$); % Handlebar Top
+	\coordinate (d5RS) at ($(fhRS)!1!90:(d4RS)$);
+	\coordinate (d6RS) at ($(rhRS)!1!-90:(d2RS)$); 
+	
+	% wheels
+	\draw[very thick](rhRS) circle (0.25);
+	\draw[very thick](fhRS) circle (0.25);
+	
+	% frame and seat
+	\draw (rhRS) -- (sbRS) -- (pRS) -- (rhRS);
+	\draw (sbRS) -- (stRS);
+	\draw (slRS) -- (srRS);
+	\draw (sbRS) -- (hbbRS) -- (fhRS) -- (pRS) -- (sbRS);
+	\draw (hbbRS) -- (hbtRS);
+	
+	% road
+	\draw[ultra thick](3.5,4.75) .. controls (5,4.25) and (6,4.5) .. (7,5);
+	
+	% surrounding box
+	\draw[ultra thick](3.5,4.5) rectangle (7,6.75);
+	
+	% Text
+	\node[text width = 2cm] at (8.5,5.75) {Roadsurface};
+	
+	
+	%% FIXED FRAME MODEL (4 units along X, 2.5 units along Y from origin)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Coordinates
+	\coordinate (rhFF) at (4,2.5); % Rearhub
+	\coordinate (fhFF) at (6,2.5); % Fronthub
+	\coordinate (d1FF) at ($(rhFF)!0.25!(fhFF)$); 
+	\coordinate (sbFF) at ($(d1FF)!0.33!90:(fhFF)$); % Seat Bottom
+	\coordinate (stFF) at ($(d1FF)!0.5!90:(fhFF)$); % Seat Top
+	\coordinate (srFF) at ($(stFF)!0.3!90:(sbFF)$); % Seat Right
+	\coordinate (slFF) at ($(stFF)!0.3!-90:(sbFF)$); % Seat Left
+	\coordinate (d2FF) at ($(rhFF)!0.5!(fhFF)$); 
+	\coordinate (pFF) at ($(d2FF)!0.15!-90:(fhFF)$); % Pedal
+	\coordinate (d3FF) at ($(rhFF)!0.875!(fhFF)$); 
+	\coordinate (hbbFF) at ($(d3FF)!1!-90:(d2FF)$); % Handlebar Bottom
+	\coordinate (d4FF) at ($(rhFF)!0.75!(fhFF)$); 
+	\coordinate (hbtFF) at ($(d4FF)!1!-90:(rhFF)$); % Handlebar Top
+	\coordinate (d5FF) at ($(fhFF)!1!90:(d4FF)$);
+	\coordinate (d6FF) at ($(rhFF)!1!-90:(d2FF)$); 
+	
+	% Fixed Joints
+	% RH Joint
+	\coordinate (j1FF) at ($(rhFF)!0.75!-60:(d1FF)$); 
+	\coordinate (j2FF) at ($(rhFF)!0.75!-120:(d1FF)$);
+	% FH Joint
+	\coordinate (j3FF) at ($(fhFF)!0.75!60:(d4FF)$); 
+	\coordinate (j4FF) at ($(fhFF)!0.75!120:(d4FF)$);
+	
+	% frame and seat
+	\draw (rhFF) -- (sbFF) -- (pFF) -- (rhFF);
+	\draw (sbFF) -- (stFF);
+	\draw (slFF) -- (srFF);
+	\draw (sbFF) -- (hbbFF) -- (fhFF) -- (pFF) -- (sbFF);
+	\draw (hbbFF) -- (hbtFF);
+	\draw[ultra thick](rhFF) -- (j1FF) -- (j2FF) -- (rhFF);
+	\draw[ultra thick](fhFF) -- (j3FF) -- (j4FF) -- (fhFF);
+	
+	% surrounding box
+	\draw[ultra thick](3.5,2) rectangle (7,4.25);
+	
+	% Text
+	\node[text width = 2cm] at (8.5,3.25) {Fixed Frame};
+	
+	
+	%% FIXED FRONT HUB (4 units along X, 0 units along Y from origin)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Coordinates
+	\coordinate (rhFFH) at (4,0); % Rearhub
+	\coordinate (fhFFH) at (6,0); % Fronthub
+	\coordinate (d1FFH) at ($(rhFFH)!0.25!(fhFFH)$); 
+	\coordinate (sbFFH) at ($(d1FFH)!0.33!90:(fhFFH)$); % Seat Bottom
+	\coordinate (stFFH) at ($(d1FFH)!0.5!90:(fhFFH)$); % Seat Top
+	\coordinate (srFFH) at ($(stFFH)!0.3!90:(sbFFH)$); % Seat Right
+	\coordinate (slFFH) at ($(stFFH)!0.3!-90:(sbFFH)$); % Seat Left
+	\coordinate (d2FFH) at ($(rhFFH)!0.5!(fhFFH)$); 
+	\coordinate (pFFH) at ($(d2FFH)!0.15!-90:(fhFFH)$); % Pedal
+	\coordinate (d3FFH) at ($(rhFFH)!0.875!(fhFFH)$); 
+	\coordinate (hbbFFH) at ($(d3FFH)!1!-90:(d2FFH)$); % Handlebar Bottom
+	\coordinate (d4FFH) at ($(rhFFH)!0.75!(fhFFH)$); 
+	\coordinate (hbtFFH) at ($(d4FFH)!1!-90:(rhFFH)$); % Handlebar Top
+	\coordinate (d5FFH) at ($(fhFFH)!1!90:(d4FFH)$);
+	\coordinate (d6FFH) at ($(rhFFH)!1!-90:(d2FFH)$); 
+	
+	% Fixed Joints
+	% FH Joint
+	\coordinate (j3FFH) at ($(fhFFH)!0.75!60:(d4FFH)$); 
+	\coordinate (j4FFH) at ($(fhFFH)!0.75!120:(d4FFH)$);
+	
+	% frame and seat
+	\draw (rhFFH) -- (sbFFH) -- (pFFH) -- (rhFFH);
+	\draw (sbFFH) -- (stFFH);
+	\draw (slFFH) -- (srFFH);
+	\draw (sbFFH) -- (hbbFFH) -- (fhFFH) -- (pFFH) -- (sbFFH);
+	\draw (hbbFFH) -- (hbtFFH);
+	\draw[ultra thick](fhFFH) -- (j3FFH) -- (j4FFH) -- (fhFFH);
+	
+	% surrounding box
+	\draw[ultra thick](3.5,-0.5) rectangle (7,1.75);
+	
+	% Text
+	\node[text width = 2cm] at (8.5,0.75) {Fixed Fronthub};
+	
+	
+	%% FIXED REAR HUB (4 units along X, -2.5 units along Y from origin)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Coordinates
+	\coordinate (rhFRH) at (4,-2.5); % Rearhub
+	\coordinate (fhFRH) at (6,-2.5); % Fronthub
+	\coordinate (d1FRH) at ($(rhFRH)!0.25!(fhFRH)$); 
+	\coordinate (sbFRH) at ($(d1FRH)!0.33!90:(fhFRH)$); % Seat Bottom
+	\coordinate (stFRH) at ($(d1FRH)!0.5!90:(fhFRH)$); % Seat Top
+	\coordinate (srFRH) at ($(stFRH)!0.3!90:(sbFRH)$); % Seat Right
+	\coordinate (slFRH) at ($(stFRH)!0.3!-90:(sbFRH)$); % Seat Left
+	\coordinate (d2FRH) at ($(rhFRH)!0.5!(fhFRH)$); 
+	\coordinate (pFRH) at ($(d2FRH)!0.15!-90:(fhFRH)$); % Pedal
+	\coordinate (d3FRH) at ($(rhFRH)!0.875!(fhFRH)$); 
+	\coordinate (hbbFRH) at ($(d3FRH)!1!-90:(d2FRH)$); % Handlebar Bottom
+	\coordinate (d4FRH) at ($(rhFRH)!0.75!(fhFRH)$); 
+	\coordinate (hbtFRH) at ($(d4FRH)!1!-90:(rhFRH)$); % Handlebar Top
+	\coordinate (d5FRH) at ($(fhFRH)!1!90:(d4FRH)$);
+	\coordinate (d6FRH) at ($(rhFRH)!1!-90:(d2FRH)$); 
+	
+	% Fixed Joints
+	% RH Joint
+	\coordinate (j1FRH) at ($(rhFRH)!0.75!-60:(d1FRH)$); 
+	\coordinate (j2FRH) at ($(rhFRH)!0.75!-120:(d1FRH)$);
+	
+	% frame and seat
+	\draw (rhFRH) -- (sbFRH) -- (pFRH) -- (rhFRH);
+	\draw (sbFRH) -- (stFRH);
+	\draw (slFRH) -- (srFRH);
+	\draw (sbFRH) -- (hbbFRH) -- (fhFRH) -- (pFRH) -- (sbFRH);
+	\draw (hbbFRH) -- (hbtFRH);
+	\draw[ultra thick](rhFRH) -- (j1FRH) -- (j2FRH) -- (rhFRH);
+	
+	% surrounding box
+	\draw[ultra thick](3.5,-3) rectangle (7,-0.75);
+	
+	% Text
+	\node[text width = 2cm] at (8.5,-1.75) {Fixed Rearhub};
+	
+	%% CONTROLLED FRAME (4 units along X, -5 units along Y from origin)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Coordinates
+	\coordinate (rhCF) at (4,-5); % Rearhub
+	\coordinate (fhCF) at (6,-5); % Fronthub
+	\coordinate (d1CF) at ($(rhCF)!0.25!(fhCF)$); 
+	\coordinate (sbCF) at ($(d1CF)!0.33!90:(fhCF)$); % Seat Bottom
+	\coordinate (stCF) at ($(d1CF)!0.5!90:(fhCF)$); % Seat Top
+	\coordinate (srCF) at ($(stCF)!0.3!90:(sbCF)$); % Seat Right
+	\coordinate (slCF) at ($(stCF)!0.3!-90:(sbCF)$); % Seat Left
+	\coordinate (d2CF) at ($(rhCF)!0.5!(fhCF)$); 
+	\coordinate (pCF) at ($(d2CF)!0.15!-90:(fhCF)$); % Pedal
+	\coordinate (d3CF) at ($(rhCF)!0.875!(fhCF)$); 
+	\coordinate (hbbCF) at ($(d3CF)!1!-90:(d2CF)$); % Handlebar Bottom
+	\coordinate (d4CF) at ($(rhCF)!0.75!(fhCF)$); 
+	\coordinate (hbtCF) at ($(d4CF)!1!-90:(rhCF)$); % Handlebar Top
+	\coordinate (d5CF) at ($(fhCF)!1!90:(d4CF)$);
+	\coordinate (d6CF) at ($(rhCF)!1!-90:(d2CF)$); 
+	\coordinate (d7CF) at ($(rhCF)!0.5!20:(fhCF)$); % Centre of gravity
+	
+	% CoG Forces
+	\node[branch] at (d7CF) (bCoG) {};
+	\node[branch, above of = bCoG, node distance = 0.5cm] (bCoG1) {};
+	\node[branch, right of = bCoG, node distance = 0.5cm] (bCoG2) {};
+	\draw[->,very thick](bCoG) -- (bCoG1);
+	\draw[->,very thick](bCoG) -- (bCoG2);
+	
+	
+	% frame and seat
+	\draw (rhCF) -- (sbCF) -- (pCF) -- (rhCF);
+	\draw (sbCF) -- (stCF);
+	\draw (slCF) -- (srCF);
+	\draw (sbCF) -- (hbbCF) -- (fhCF) -- (pCF) -- (sbCF);
+	\draw (hbbCF) -- (hbtCF);
+	
+	% surrounding box
+	\draw[red,ultra thick](3.5,-5.5) rectangle (7,-3.25);
+	
+	% Text
+	\node[red,text width = 2cm] at (8.5,-4.25) {Controlled Frame};
+	
+	%%CONNECTIONS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\node[branch] at (2,0.75) (b) {};
+	\node[branch] at (2,5.75) (bRS) {};
+	\node[branch] at (2,3.25) (bFF) {};
+	\node[branch] at (2,-1.75) (bFRH) {};
+	\node[branch] at (2,-4.25) (bCF) {};
+	
+	\draw[ultra thick](0,0.75) -- (b) -- (bRS);
+	\draw[ultra thick](b) -- (bFF);
+	\draw[ultra thick](b) -- (bFRH);
+	\draw[ultra thick](b) -- (bCF);
+	\draw[->,ultra thick] (bRS) -- (3.5,5.75);
+	\draw[->,ultra thick] (bFF) -- (3.5,3.25);
+	\draw[->,ultra thick] (b) -- (3.5,0.75);
+	\draw[->,ultra thick] (bFRH) -- (3.5,-1.75);
+	\draw[->,ultra thick] (bCF) -- (3.5,-4.25);
+	
+	
+\end{tikzpicture}

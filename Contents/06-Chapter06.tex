@@ -1,0 +1,94 @@
+\changefontsizes{20pt}
+\chapter{Future Scope and Summary}
+\label{cha:chap6}
+\changefontsizes{12pt}
+This chapter outlines the future scope and possible work packages which can be derived from the work covered in this thesis. There are three main ideas which can be pursued in order to improve SAA for the CF loadcase; \emph{Feedforward Control for ideal disturbance rejection}, \emph{Application of controller forces on multiple bike frame points} and \emph{using an elastic bike frame}.
+% --------------------------------------------------------------------------
+% 		Section 6.1
+% --------------------------------------------------------------------------
+
+\section{Ideal Disturbance Rejection}
+For the feedforward part introduced in the previous chapter, only constant gain values were used. While not in the scope of this thesis, it is interesting to explore the case when the feedforward gains are transfer functions.
+Figure \ref{fig:idealdistrej} illustrates the control system designed for disturbance rejection. $\mathbf{d}$ is the vector of excitations fed to the CF bike, which in this context is taken as the disturbance signal.
+\begin{figure}[h!]
+	\centering
+	\tikzstyle{block}     = [draw, rectangle, minimum height=1.5cm, minimum width=1.6cm]
+	\tikzstyle{envp}     = [draw, rectangle, minimum height=4cm, minimum width=2.5cm,dotted]
+	\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=0.01mm, fill=black, draw=black]
+	\tikzstyle{connector} = [->, thick]
+	\tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+	\tikzstyle{inout}     = []
+	\tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+	\begin{tikzpicture}[auto, node distance=3cm, >=stealth']
+		\node[block] (G) {$\mathbf{G}$};
+		\node[block, left of = G, node distance = 7cm] (PD) {$\begin{matrix}
+				K_x&&\\
+				&K_y&\\
+				&&K_z
+			\end{matrix}$};
+		\node[inout, above of = G,node distance = 5cm] (d) {\textbf{d}};
+		\node[block, above of = G,node distance = 2cm] (Gd) {$\mathbf{G}_d$};
+		\node[envp,above of = G,node distance = 1cm] (bike) {};
+		\node[block, left of = Gd] (precontrol) {$\mathbf{K}_d$};
+		\node[inout,right of = G] (y) {\textbf{y}};
+		\node[sum,left of = PD,node distance = 2cm] (s) {};
+		\node[sum,left of = G] (s1) {};
+		\node[sum,right of = G, node distance = 1.5cm] (s2) {};
+		\node[branch,right of = G, node distance = 2cm] (b1) {};
+		\node[branch,below of = b1] (b2) {};
+		\node[dummy] (CF) [above right = 0.1cm and 0.05cm of bike] {CF};
+		
+		\draw[thick] (b1) -- (b2);
+		\draw[connector] (b2) -| (s);
+		\draw[connector] (s) -- (PD);
+		\draw[connector] (d) -| (precontrol);
+		\draw[connector] (d) -- (Gd);
+		\draw[connector] (precontrol) -- (s1);
+		\draw[connector] (PD) -- (s1);
+		\draw[connector] (s1) -- node{\textbf{u}} (G);
+		\draw[connector] (Gd) -| (s2);
+		\draw[connector] (G) -- (s2);
+		\draw[connector] (s2) -- (y);
+		
+	\end{tikzpicture}
+	\caption{Ideal Disturbance Rejection}
+	\label{fig:idealdistrej}
+\end{figure}
+The feedback controller is decentralized as before, and $\mathbf{K}_d$ is the feedforward transfer function matrix. It is important to note that for this control system design, the dynamic model of the CF Bike needs to be linearized. Once a linearized model is obtained, the plant transfer function matrix ($\mathbf{G}$) and the disturbance dynamics transfer function matrix ($\mathbf{G}_d$) can be obtained. Then, for ideal disturbance rejection, i.e. the output $\mathbf{y}$ doesn't get affected by $\mathbf{d}$, $\mathbf{K}_d$ can be derived as:
+\begin{align*}
+	\bm{y} &= \bm{G}_d\bm{d} + \bm{G}\bm{u}\\
+	\bm{u} &= \bm{K}\bm{y} + \bm{K}_d\bm{d}\\
+	\implies \bm{y} &= \bm{G}_d\bm{d} + \bm{GK}\bm{y} + \bm{GK}_d\bm{d}\\
+	\implies \bm{y} &= (\bm{I - GK})^{-1}(\bm{G}_d + \bm{GK}_d)\bm{d}
+\end{align*}
+For $\mathbf{K}_d = -\mathbf{G}^{-1}\mathbf{G}_d$, ideal disturbance rejection is achieved theoretically. 
+
+\subsection*{System Modelling}
+For obtaining the plant and disturbance dynamics, system modelling needs to be carried out of the CF Bike. To that end, a simplistic dynamic model of the CF Bike can be made, from which the equations of motion can be derived and the state-space matrices can be obtained. Alternatively, Simpack also has a functionality where it linearizes the model about an equilibrium point, and directly gives out the state-space matrices. In this section, a brief overview of the state-space modeling and the subsequent transfer function matrix calculation is given.
+
+The outputs of the system are assumed to be the CF Bike CoG planar degrees of freedom (translations along X and Y, and rotation about Z), the system inputs are considered to be the controller/actuation effort on the CoG of the bike frame, and the excitations fed to the CF Bike at the 4 points (handlebar, pedal, front frame, rear frame). 10 states are recognised by Simpack for the state space modelling, effectively meaning 5 independent minimal degrees of freedom and their corresponding velocities. Then, the dynamics of the bike can be derived as:
+\begin{align*}
+	\dot{\bm{x}} &= \bm{Ax} + \bm{Bu}\\
+	\bm{y} &= \bm{Cx} + \bm{Du}\\
+	\bm{G}_{CF} &= \bm{C}(s\bm{I} - \bm{A})^{-1}\bm{B} + \bm{D}
+\end{align*}
+The transfer function matrix $\mathbf{G}_{CF}$ can be decomposed as,
+\begin{align*}
+	\bm{G}_{CF} = \begin{bmatrix}
+		\bm{G}&\bm{G}_d
+	\end{bmatrix}
+\end{align*}
+ 
+ While such an approach looks extremely promising theorectically, there are few plausible bottlenecks which can appear while implementation. For instance, for perfect disturbance rejection, we need to invert the plant dynamics transfer function matrix $\mathbf{G}$ and depending on the transfer funcion matrix zeros, that might not be possible at every point. Additionally, the state-space matrices given out by Simpack are of a very high order which makes the simulation time extremely long and sometimes even leads to convergence issues. Thus, model reduction needs to be carried out on the model extracted from Simpack, or alternatively, a simplified dynamic model needs to be constructed of the CF Bike and the state-space matirces need to be computed manually from the subsequent equations of motion.
+ 
+ \section{Modifying application of control forces}
+ For the entirety of the work carried out in this thesis, the control forces were applied only at a singular point of the bike; the centre of gravity. Another interesting research direction would be exploring if there are better ways of feeding the controller forces to the bike frame by means of increasing the number of points at which the controller force is applied, or even making use of elements like RBE2/RBE3 in case flexible bodies are used to model the bike.
+ 
+ \section{Modelling the bike using flexible bodies}
+ To capture the real behaviour of the bike frame and its components better, elastic bodies may be used to model the bike. This kind of modelling would also be suitable for the CF bike loadcase, since there are no external constraints on the bike in this loadcase, and the standard external contrainsts can not be used with elastic bodies. Additionally, if elastic bodies are used, we would need to use standard FEM elements like RBE2 or RBE3 for the application of the control forces to the bike frame. 
+ 
+ \section{Summary}
+ In this thesis, the \emph{Controlled Frame} loadcase in SAA was studied in order to obtain the best performing controller, with the performance metrics being how well internal loads from a reference simulation are reflected in the SAA Bike model. Classical control methods are used, and the concept of pre-control using feedforward controllers is explored. It is concluded that while pre-control has no sigificant effect on pure feedback control, leaving the angular rotation of the bike model unconstrained and unactuated leads to be best controller performance.
+ 
+ Along with controller design, possible pitfalls of SAA are also explored, namely negligence of bike inertia and measurement noises. Based on inertia and noise analysis, it is found out that while bike translational inertia plays a negligible role in the total inertia, the controller performance would be significantly dependent on how well the noise from the sensors measuring the loads on a real bike are filtered out.
+ 

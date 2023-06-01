@@ -1,0 +1,112 @@
+\changefontsizes{20pt}
+\chapter{Methodology and Concept}
+\label{cha:kap2}
+\changefontsizes{12pt}
+
+The prime idea behind SAA is the existence of a mathematical model of the bike, while the mathematical models of the terrain and the driver are replaced by loads measured in real-time actual riding conditions. To that end, several simulation models of the bike may be tried, each of which have to be excited by the measured loads. At the time of writing this thesis, real time sensing of loads on a real bike was still not availble, thus a reference simulation of the bike on a prescribed track is used as a proxy for the real bike fitted with sensors.
+% --------------------------------------------------------------------------
+% 		Abschnitt 2.1
+% --------------------------------------------------------------------------
+\section{SAA Simulation Setup}
+\label{sec:kap2ab1}
+The simulation set-up consists of a bike frame model, which is a simplified version of the actual bike dynamic model. There are multiple possible ways to constrain the bike frame model and different loadcases are used in order to emulate the different simulation models of the bike. In each of the loadcases, the bike frame model is the same, but the boundary conditions at the front and rear hubs are varied. For instance, in order to set-up the reference loadcase, which emulates the actual bike ride for the time being, wheels, a driver mass, a riding track and rotational degrees of freedom on the rear and front hubs are added to the bike frame model. In total, there are four loadcases being currently tested for SAA, and their nomenclature can be referred to from Figure \ref{fig:loadcases}.
+
+\begin{figure}[h!]
+		%\centering
+		\input{Contents/Resources/SAALoadcases}
+\caption{Various Loadcases in SAA}
+\label{fig:loadcases}
+\end{figure}
+
+The focus of this thesis is on the last loadcase i.e. the controlled frame loadcase. In this loadcase, the frame is left free in 3D space, i.e. there are no external constraints implemented on the frame. The objective in this loadcase is to implement a control system which controls and stabilises the free to move frame of the bike in such a way that the reference ride (Roadsurface or the real-time bike ride) behaviour is reflected in the control response. For the rest of the thesis, the roadsurface loadcase, which will be the reference simulation, will be referred to as \emph{RS} and the Controlled Frame loadcase will be referred to as the \emph{CF}.
+
+% --------------------------------------------------------------------------
+% 		Abschnitt 2.2
+% --------------------------------------------------------------------------
+\section{Validation of SAA}
+\label{sec:kap2ab2}
+The aim of SAA is to mimic the internal loads and stresses which are developed in the various components of the bike when it is ridden. This also forms the basis for the validation approach. SAA can be considered successful only when the loads developed at any arbritary point of the bike at any given time of the simulation matches the actual load measured at the corresponding time instance in the real-time measurement data. Since the RS Bike is our reference simulation, this means we need the loads at any given point on the CF Bike and the RS Bike to be the same. To that end, three so called \emph{validation points} are selected. The point A is at the intersection of the rear frame and one of the dampers, point B is at the intersection of the front frame and the fork, and point C is at the intersection of the rear frame and the front frame. A brief overview of the validation process is illustrated in Figure \ref{fig:validation}.
+\begin{figure}[h!]
+    %\centering
+    \input{Contents/Resources/SAAValidation}
+    \caption{Validation of SAA}
+    \label{fig:validation}
+\end{figure}
+
+\subsection*{Error during Validation}
+During validation of SAA, it is necessary to objectify the errors between the CF and RS loadcases at the prescribed validation points. While plots directly comparing the forces developed at individual points in CF and RS may be helpful, in some cases the obtained improvement/degradation of results is not high enough to be refelected clearly from the plots. Thus, along with plots, tabulation of errors between the forces is also used. The parameters used for objectifying the errors are:
+\begin{enumerate}
+	\item Mean percentage error $= \frac{1}{n} \sum_{i=1}^n \frac{\lvert C_i - R_i \rvert}{\lvert R_i \rvert} \cdot 100$, where $n$ are the total number of data-points in the time series, $C_i$ is the generalized force value at the $i^{th}$ time-instant in the CF Simulation, and $R_i$ is the generalized force value at the $i^{th}$ time-instant in the RS Simulation.
+	\item RMSE $= \sqrt{\frac{1}{n} \sum_{i=1}^n (C_i - R_i)^2}$
+	\item $R_2$ (Coefficient of Determination), which is the measure of how similar in shape the force curves from CF and RS are.
+
+\end{enumerate}
+
+% --------------------------------------------------------------------------
+% 		Abschnitt 2.3
+% --------------------------------------------------------------------------
+\section{Loads workflow}
+\label{sec:kap2ab3}
+The flow of loads calculation is illustrated in Figure \ref{fig:loadswf}. The simulation loads from RS are used to excite the bike in CF. When the real-time mesurement of loads are available, the simulation loads would be replaced by the measured loads. The simulation loads are the forces experienced at the \emph{front hub, rear hub, pedals} and the \emph{handlebar}. The idea is that these loads capture all the relevant information about the terrain and how the rider is riding the bike.
+
+\begin{figure}[htb]
+	\centering
+	\tikzstyle{model}     = [draw, rectangle, minimum height=1cm, minimum width=1.6cm]
+	\tikzstyle{run}     = [draw, diamond, minimum height=1cm, minimum width=1.6cm]
+	\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=1mm, fill=black, draw=black]
+	\tikzstyle{connector} = [->, thick]
+	\tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+	\tikzstyle{inout}     = []
+	\tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+	\begin{tikzpicture}[auto, node distance=3cm, >=stealth']
+		\node[model] (SL) {Simulation Loads};
+		\node[model] (VL1) [above of = SL] {Validation Loads};
+		\node[run] (r1) [left of = SL,node distance = 5cm] {RUN};
+		\node[model] (RS) [left of = r1]{Roadsurface};
+		\node[model] (CF) [below of = SL]{Controlled Frame};
+		\node[run] (r2) [right of = CF]{RUN};
+		\node[model] (VL2) [right of = r2]{Validation Loads};
+		\node[model,right of = SL,node distance = 6cm] (Val)  {Validation};
+		\node[branch,right of = r1, node distance = 1.4cm] (b1) {};
+		\draw[connector] (RS) -- (r1);
+		\draw[connector] (r1) -- (SL);
+		\draw[connector] (b1) |- node{} (VL1);
+		\draw[connector] (VL1.east) -| node{} (Val.north);
+		\draw[connector] (VL2) -- (Val);
+		\draw[connector] (SL) -- node{Excitations} (CF);
+		\draw[connector] (CF) -- (r2);
+		\draw[connector] (r2) -- (VL2);
+	\end{tikzpicture}
+	\caption{Loads Workflow}
+	\label{fig:loadswf}
+	\end{figure}
+
+\section{Control System setup}
+The control system simulation setup is illustrated in Figure \ref{fig:controlsetup}. The setup utilizes the cosimulation functionalties provided by the SIMAT Block in Simulink, which allows multi-body simulations of the CF Bike to run in Simpack simultaneously alongside Simulink. Force elements specifically for transfering the controller forces/effort ($\mathbf{u}$) to the bike MBD model have been set up in Simpack. The controller is modelled in Simulink, since it provides extensive control system design functionalities. The SIMAT Block allows simultaneous data transfer between Simpack and Simulink during the Co-simulation, where the controller effort is transferred from Simulink to Simpack, and the centre of gravity positions (translational and rotational) are transferred in the opposite direction.
+\begin{figure}[htb]
+	\centering
+	\tikzstyle{model}     = [draw, rectangle, minimum height=1cm, minimum width=1.6cm]
+	\tikzstyle{run}     = [draw, diamond, minimum height=1cm, minimum width=1.6cm]
+	\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=0.01mm, fill=black, draw=black]
+	\tikzstyle{connector} = [->, thick]
+	\tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+	\tikzstyle{inout}     = []
+	\tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+	\begin{tikzpicture}[auto, node distance=5cm, >=stealth']
+		\node[model] (CF) {CF Bike Model (Simpack)};
+		\node[model, left of = CF,node distance = 6cm] (control) {Controller (Simulink)};
+		\node[model, right of = CF] (op) {Bike CG Position};
+		\node[branch, below of = op] (b) {};
+		
+		\draw[connector] (CF) -- (op);
+		\draw[thick] (op) -- (b);
+		\draw[connector] (b) -| (control.south);
+		\draw[connector] (control) -- node{\textbf{u}}(CF);
+	\end{tikzpicture}
+	\caption{Control System Setup}
+	\label{fig:controlsetup}
+	\end{figure}
+
+Thus, a functional virtual control system is setup using both Simpack and Simulink. The controller effort from the controller consists of forces along the X and Y axes, and torque about the Z axis (axis coming out of the plane for the bike model in Simpack). The controller forces are applied at a singular point, the point being the centre of gravity of the bike. 
+
+It is important to note that a control system is necessary for the controlled frame loadcase, since in this loadcase the bike is free to move in 3D space and moreover is excited by external loads. In absence of any constraint on the bike frame, the frame would start to translate and rotate in an uncontrolled manner, thus showcasing a non-physical instability. The control system acts as a constraint, which prevents such instability in the bike frame.

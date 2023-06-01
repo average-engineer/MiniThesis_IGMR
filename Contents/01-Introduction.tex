@@ -1,0 +1,18 @@
+\changefontsizes{20pt}
+\chapter{Introduction} 
+\label{cha:einleitung}
+\changefontsizes{12pt}
+The most common approach of testing and validating the structural integrity and performance of bike frames and components is usually the use of test benches \cite{FS07,Jac17}. These tests try to emulate the different kinds of loads which the bike would experience like static, dynamic and impact loads \cite{Bru10,FS07,HHS11,Wol20}. But these test benches are usually an over-simplification of the actual ride conditions, especially for mountain bikes and trail riding bikes, where the ride conditions are usually more extreme and so are the rider movements while riding the bike, which make it extremely difficult to replicate the actual loads in the test bench \cite{Jac17,BS10,CAD16,HHS11}. Additionally, a lot of such tests are performed on individual components of the bike, but in reality during a bike ride, its components interact amongst each other and influence each other \cite{Bru10}. An alternative is to create a digital twin, which requires faithful modelling of the rider, terrain and the bike. But for many cases, especially the ones like mountain biking or trail riding, it is extremely difficult to accurately model the manoeuvres and positions of the rider \cite{MPR07,SM13} and the terrain-bike wheel contact \cite{DTC13,KSM08,Red05}. A third alternative exists: \emph{Semi-Analytical Approach} (SAA) \cite{MX14,RTV19}.  
+
+In SAA, the simulation model of only the bike is created, and to capture the rider and the terrain effects, force measurements from a real bike fitted with sensors at prescribed locations are used. The measurements recorded from the sensors are then fed to the simulation model of the bike as excitations. The workflow of SAA is illustrated in Figure \ref{fig:SAA}.
+
+\begin{figure}[h!]
+	\centering
+	\input{Contents/Resources/SAAWorkflow}
+\caption{SAA Workflow}
+\label{fig:SAA}
+\end{figure} 
+
+
+
+Thus, in SAA a lot of computation time and effort is saved since only the bike needs to be modelled, and the structural performance and integrity of the bike frame can be tested on the basis of the loads which will be estimated by the bike model excited by the measurements from the real bike.  

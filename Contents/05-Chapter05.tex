@@ -1,0 +1,296 @@
+\changefontsizes{20pt}
+\chapter{Feedback with Feedforward Control (Pre-control)}
+\label{cha:chap5}
+\changefontsizes{12pt}
+For pre-control, the net imbalance forces and torques are fed forward to the controller along with the feedback position control. The control system is illustrated in Figure \ref{fig:precontrol}. Thus, the controller effort $\mathbf{u}$ is a function of both the deviation of the bike centre of gravity from the reference position, and the net imbalances on the bike ($\mathbf{d}$).
+
+\begin{figure}[h!]
+	\centering
+	\tikzstyle{block}     = [draw, rectangle, minimum height=1.5cm, minimum width=1.6cm]
+	\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=0.01mm, fill=black, draw=black]
+	\tikzstyle{connector} = [->, thick]
+	\tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+	\tikzstyle{inout}     = []
+	\tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+	\begin{tikzpicture}[auto, node distance=3cm, >=stealth']
+		\node[block] (bike) {CF};
+		\node[block, left of = bike, node distance = 7cm] (PD) {$\begin{matrix}
+				K_x&&\\
+				&K_y&\\
+				&&K_z
+			\end{matrix}$};
+		\node[inout, above of = bike,node distance = 2cm] (d) {\textbf{d}};
+		\node[block, left of = d] (precontrol) {$\mathbf{K}_d$};
+		\node[inout,right of = bike] (y) {\textbf{y}};
+		\node[sum,left of = PD,node distance = 2cm] (s) {};
+		\node[sum,left of = bike] (s1) {};
+		\node[branch,right of = bike,node distance = 1.5cm] (b1) {};
+		\node[branch,below of = b1] (b2) {};
+		
+		\draw[connector] (bike) -- (y);
+		\draw[thick] (b1) -- (b2);
+		\draw[connector] (b2) -| (s);
+		\draw[connector] (s) -- (PD);
+		\draw[connector] (d) -- (precontrol);
+		\draw[connector] (precontrol) -- (s1);
+		\draw[connector] (PD) -- (s1);
+		\draw[connector] (s1) -- node{\textbf{u}} (bike);
+		
+	\end{tikzpicture}
+	\caption{Pre-Control}
+	\label{fig:precontrol}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% 		Section 5.1
+% --------------------------------------------------------------------------
+
+\section{Motivation}
+The idea behind the use of pre-control is the anticipation of the imbalance in the excitations which are fed to the CF Bike. The concept of imbalance anticipation is illustrated in Figure \ref{fig:precontrolMotivation}, where a set of hypothetical load plots for the handlebar and the rearhub for a small time frame $\Delta t$ is shown. In the CF Bike simulation, the bike will start its deviation from its position primarily because of the imbalance, specifically when the imbalance is large enough to translate/rotate the bike frame. Then based on the resultant deviation, the position control will react and try to regulate the bike. This reaction will not coincide with the time instant at which the imbalance first starts, since the imbalance will take some time to be large enough to create the position change of the bike. Such a point where the position control starts reacting is depicted as B and $t_B$ in the figure. When precontrol is used, we are directly feeding in the information about the imbalance to the controller, thus the controller will know the exact time at which the imbalance starts. The starting point of the imbalance is shown as A and $t_A$ in the figure. Thus, the controller will start reacting faster to compensate the imbalance and ideally it should lead to a better control performance of the CF Bike.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale = 0.45]{Contents/Resources/Precontrol/Motivation.png}
+	\caption{Imbalance anticipation}
+	\label{fig:precontrolMotivation}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% 		Section 5.2
+% --------------------------------------------------------------------------
+
+\section{Varying Pre-Control Gains}
+The feedforward controller ($\mathbf{K}_d$) is considered to be decentralised like the feedback controller, and is considered to be constant. $$\mathbf{K}_d = \begin{bmatrix}
+	k_1&0&0\\
+	0&k_2&0\\
+	0&0&k_3
+\end{bmatrix}$$
+Thus, the controller effort looks like:
+\begin{align*}
+	&u_x = K_x\Delta x + k_1d_x\\
+	&u_y = K_y\Delta y + k_2d_y\\
+	&u_z = K_z\Delta \gamma + k_3d_z
+\end{align*}
+
+The tabulated controller performance for $k_1 = k_2 = k_3 = 1$ and $k_1 = k_2 = k_3 = -1$ and PD Feedback Control are shown in tables \ref{tab:precontrolA1} to \ref{tab:precontrolC2}.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 3&128&0.98\\ 
+		FY & 101&970&0.01 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point A of CF with PD Control and Pre-control with gains $\{-1,-1,-1\}$}
+	\label{tab:precontrolA1}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 4&15&0.98\\ 
+		FY & 4&2&0.98 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point B of CF with PD Control and Pre-control with gains $\{-1,-1,-1\}$}
+	\label{tab:precontrolB1}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 4&154&0.95\\ 
+		FY & 59&972&0.05 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point C of CF with PD Control and Pre-control with gains $\{-1,-1,-1\}$}
+	\label{tab:precontrolC1}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 3&129&0.98\\ 
+		FY & 103&914&0 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point A of CF with PD Control and Pre-control with gains $\{1,1,1\}$}
+	\label{tab:precontrolA2}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 4&16&0.98\\ 
+		FY & 4&2&0.98 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point B of CF with PD Control and Pre-control with gains $\{1,1,1\}$}
+	\label{tab:precontrolB2}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 4&155&0.95\\ 
+		FY & 59&912&0.03 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point C of CF with PD Control and Pre-control with gains $\{1,1,1\}$}
+	\label{tab:precontrolC2}
+\end{table}
+
+It can be seen that irrespective of the feedforward gains, the results don't improve or degrade by a very significant margin. Infact, it was observed after multiple simulation runs of different feedforward gains combined with different feedback controllers that using pre-control doesn't have a very (positive or negative) significant effect on the performance that pure feedback control was showing. Thus, our hypothesis regarding the perceived benefit of pre-control is more or less proved wrong.
+
+% --------------------------------------------------------------------------
+% 		Section 5.3
+% --------------------------------------------------------------------------
+
+\section{Eliminating CF Angular Position Feedback}
+\label{sec:noFeedback}
+As mentioned in Chapter \ref{cha:chap3}, for almost all purely feedback controllers, the control torque ($u_z$) was always significantly less than the net imbalance torque experienced by the bike. This is also true when pre-control is used. The likely reason for this might be the compensation in position provided by the feedback of the rotation of the CF Bike. Thus, the feedback of the angular position of the CF Bike ($\gamma$) is eliminated along with PD Control of the X and Y positions of CF Bike along with pre-control still activated. In this case, we have to be cautious since about the Z axis, a feedforward torque is directly fed without feedback, and as observed in section \ref{sec:chap3sec2} of chapter \ref{cha:chap3}, directly feedforwarding forces or torques without feedback leads to instability of the CF Bike. Thus, the pre-control gain about the Z axis is kept very low. Tables \ref{tab:noZfdkA} to \ref{tab:noZfdkC} show the tabulated performance with no Z-feedback. 
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 15&324&0.95\\ 
+		FY & 13&177&0.94 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at point A of CF with no Z Feedback and Pre-control with gains $\{0,0,-0.1\}$}
+	\label{tab:noZfdkA}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 142&359&0.31\\ 
+		FY & 142&38&0.31 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at point B of CF with no Z Feedback and Pre-control with gains $\{0,0,-0.1\}$}
+	\label{tab:noZfdkB}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 12&192&0.96\\ 
+		FY & 25&304&0.89 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at point C of CF with no Z Feedback and Pre-control with gains $\{0,0,-0.1\}$}
+	\label{tab:noZfdkC}
+\end{table}
+
+It can be seen that the control performance drastically improves, especially for the Y component of the forces at points A and C but at the same time, it worsens significantly at point B for both X and Y components.
+
+% --------------------------------------------------------------------------
+% 		Section 5.3
+% --------------------------------------------------------------------------
+
+\section{Unactuated Angular Movement of CF}
+Building on the idea introduced in section \ref{sec:noFeedback}, the angular degree of freedom of the CF bike is left unmodified, i.e. there is no Z feedback and no Z pre-control. Figures \ref{fig:noZA} to \ref{fig:noZC}, and tables \ref{tab:noZA} to \ref{tab:noZC} showcase extremely good controller performance as compared to all the controller parameters attempted.
+\begin{figure}[h]
+	\centering
+	\scalebox{0.8}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Precontrol/NoZ/RearFrameDamper2}
+	\end{tikzpicture}}
+	\caption{Loads at point A of CF with no Z Feedback and Pre-control}
+	\label{fig:noZA}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\scalebox{0.8}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Precontrol/NoZ/FrontFrameFork}
+	\end{tikzpicture}}
+	\caption{Loads at point B of CF with no Z Feedback and Pre-control}
+	\label{fig:noZB}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\scalebox{0.8}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Precontrol/NoZ/RearFrameFrontFrame}
+	\end{tikzpicture}}
+	\caption{Loads at point C of CF with no Z Feedback and Pre-control}
+	\label{fig:noZC}
+\end{figure}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 2&118&0.98\\ 
+		FY & 1&30&1 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at point A of CF with no Z Feedback and Pre-control}
+	\label{tab:noZA}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 2&15&0.98\\ 
+		FY & 2&2&0.98 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at point B of CF with no Z Feedback and Pre-control}
+	\label{tab:noZB}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 1&89&0.98\\ 
+		FY & 4&147&0.96 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at point C of CF with no Z Feedback and Pre-control}
+	\label{tab:noZC}
+\end{table}
+
+Thus, it can be said that SAA works extremely well when a position control algorithm only for the translational degrees of freedom of the bike, while the rotational degreee of freedom is left unactuated. Additionally, while the idea of pre-control was promising, using it had no significant effect on the controller performance.
+The good functioning of the SAA with no rotational degree of freedom actuation was reflected by the PID Controller introduced in section \ref{sec:chap3sec3} of chapter \ref{cha:chap3}. There the integral action for the rotational degree of freedom dominated as compared to the derivative and proportional actions, and since the integral action produces actuation based on the accumulated error over time, the overall control torque produced was quite low as compared to the PD controller introduced a section before. Thus, for a low actuated rotational degree of the freedom, the PID Controller was showing quite good results.
+
+The possible explanation for no Z-actuation showing such a good controller performance may be attributed to that fact that in the reference simulation, the RS Bike might have significant rotary inertia, which as mentioned in section \ref{sec:chap4sec1} can't be explicitly compared with the rider rotary inertia in SAA. When the angular movement of the CF Bike is left completely unconstrained, the neglected rotary inertia might be getting compensated for, and thus leading to extremely good controller results. It should also be noted that when real-time measurement of loads are used, rotary inertia of the bike may play a very important role depending on the track on which the bike is ridden. Thus, it would be prudent to leave the angular movement of the CF Bike unactuated.

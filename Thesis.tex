@@ -1,0 +1,270 @@
+% -------------------------------------------------------------------------
+% LaTeX Vorlage fuer wissenschaftliche Arbeiten am IGMR 
+% LaTeX template for thesis at the IGMR
+% -------------------------------------------------------------------------
+%
+%		AUTHOR: 		Schoeler, Frederic (FS)
+%		LAST CHANGE:	2017-11-16
+%		VERSION:		2.1
+%
+% -------------------------------------------------------------------------
+% 		ÄNDERUNGSVERZEICHNIS / List of changes
+%
+% 		V 1.0 | 2015-02-04 | F.Schoeler     | First english version
+%		V 1.1 | 2016-01-07 | F.Schoeler     | One template for german and english
+%		V 1.2 | 2017-03-21 | F.Schoeler     | Small changes for compatibility with TexLive 2016
+%		V 2.0 | 2017-05-08 | F.Schoeler     | Introduction of igm.sty
+%		V 2.1 | 2017-11-16 | F.Freikwoski   | Migration to IGMR
+%
+% -------------------------------------------------------------------------
+%		AKTUELLE Probleme / CURRENT problems: 
+%
+% -------------------------------------------------------------------------
+% 		LITERATUREMPFEHLUNG: / RECOMMENDED LITERATURE: 
+%
+% 		Kopka, Helmut: 	LaTeX - Band 1: Einführung, 
+% 			Published by Addison-Wesley, Third Edition,  2002
+%			Available at the textbook collection: ST 351T28 0001-1+3
+%		Schlosser, Joachim:	Wissenschaftliche Arbeiten schreiben mit LATEX
+%			Published by mitp, Third edition, 2009
+%			Available at the textbook collection: ST 351T28 0009+3
+%
+%		LATEX-prohibitions:		root/Latex/Literatur/l2tabu.pdf
+%		Avoid Eqnarray!:		root/Latex/Literatur/avoideqnarray.pdf	
+%		Manual KomaScript:		root/Latex/Literatur/scrguide.pdf
+%
+% -------------------------------------------------------------------------
+% 		HINWEISE / PLEASE NOTE: 
+%
+%		Zur Aktualisierung des Inhaltsverzeichnis muss 2x kompiliert werden. 
+%		Latex schreibt die Informationen beim ersten Kompilieren in eine Datei auf der
+%		Festplatte und laed diese beim zweiten Kompilieren erst ein.
+%		Fuer das Aktualisieren des Literaturverzeichnis muss pdflatex, dann bibtex und
+%		dann wieder	pdflatex kompiliert werden
+%
+%		In order to update the table of contents it is necessary to compile twice.
+%		After the first process of compiling, Latex saves the data to a document 
+%		on the hard drive and imports the data only upon a second process of compiling. 	
+%		Every update to the table of contents involves compiling pdflatex, biblatex and again pdflatex. 	
+%
+% -------------------------------------------------------------------------
+%		Magic Comments
+%		
+% !TeX TXS-program:bibliography = txs:///biber 
+%
+% -------------------------------------------------------------------------
+%
+\documentclass[
+	english,			% ngerman / english	, 
+	draft 	= false,	% [final/draft]			Document status
+	twoside	= false,	    % [false/true]		single-sided document
+	fleqn				% {equation} left justify
+	]{scrbook}           % Koma-Script
+
+% Contents Included (for faster compilation time)
+\includeonly{
+	Contents/01-Introduction,
+	Contents/02-Chapter02,
+	Contents/03-Chapter03,
+	Contents/04-Chapter04,
+	Contents/05-Chapter05,
+	Contents/06-Chapter06,
+}	
+
+% --------------------------------------------------------------------------
+% 		Pakete / Packages 
+% --------------------------------------------------------------------------
+\usepackage{igm}
+\usepackage{xcolor}
+\input{RWTH_Farben}
+
+%
+%---------------------------------------------------------------------------
+%		Ergaenzungen / additions:
+%
+% 		Die Ergaenzungen enthalten selbst definierte Tex- und Latexbefehler
+%		sowie die Liste der Woerter, welche nicht getrennt werden duerfen
+%		(hyphenation)
+%
+% 		Additions contain self-defined Tex and Latex commands as well
+%		as a list of the words that cannot be seperated.
+%		(hyphenation)
+% --------------------------------------------------------------------------
+\input{Contents/Additions}
+
+%---------------------------------------------------------------------------
+% 		Standard Aufbau / Structure 
+%
+%		- Deckblatt / Title page
+%		- Schmutztitel / Half title
+%		- Aufgabenstellung / Issue
+%		- Eidesstattliche Erklärung / Statutory declaration
+%		- (Vorwort) / (Preface)
+%		- Inhaltsverzeichnis / Table of contents
+%		- Abkuerzungsverzeichnis / List of abbreviations
+%		- Formelzeichenverzeichnis / List of symbols
+%		- Einleitung / Introduction
+%		- Hauptkapitel / Main chapters
+%		- Zusammenfassung / Summary
+%		- Ausblick / Outlook
+%		- Literaturverzeichnis / List of literature
+%		- Abbildungsverzeichnis / Register of illustrations
+%		- Tabellenverzeichnis / List of tables
+%		- Anhang / Appendix
+%		
+% --------------------------------------------------------------------------
+
+
+% --------------------------------------------------------------------------
+% 		Metadaten / Meta data 
+% --------------------------------------------------------------------------
+\author{Ashutosh Mukherjee}
+\authordegreefront{}
+\authordegreeback{B.Sc.}
+\studentno{428954}
+
+\type{Mini-Thesis}
+\title{Semi-Analytical Approach - Virtual Control System Design and Loads Verification for a multi-body model of a bike}
+%\year{9999}
+\submissiondate{\today}
+\supervisor{Johannes Bolk, MSc.}
+
+% Text der Aufgabenstellung / text of the issue
+\issuetext{The design and dimensioning of bicycles has always been a challenging task in the development process. It is necessary to resolve the conflict of objectives between a high level of safety against component failure and the requirement for a lightweight, cost-efficient design. However, determining the loads that occur during operation is a major challenge, since not all components are accessible for the application of measurement technology and the use of classical finite element methods (FEM) is often unsuitable. Already successful in the automotive and rail vehicle industry, the use of multi-body simulations (MBS) enables the link between real driving scenarios and the determination of operational loads of all system components.\\ In order to make the advantages of this approach available for the analysis of bicycle systems as well, this thesis will develop a method for the excitation of a digital twin based on measured data. The implementation of a control system with which imbalances in the excitation can be compensated (e.g. between handlebar and front wheel hub) offers great potential for improving the simulation. Based on preliminary work and existing concepts for implementation, the goal of the thesis is the continuation or, if necessary, new development of various solution ideas.\\	
+\textbf{Possible work packages}:
+\begin{itemize}
+	\item Familiarization with Matlab/Simulink
+	\item Implementation and validation of controls for stabilization of force imbalances
+	\item Conceptual design and evaluation of alternative approaches
+	\item Evaluation of the frame loads simulated on the bicycle based on the different simulation approaches.
+\end{itemize}
+}
+
+% --------------------------------------------------------------------------
+% 		Literaturdatei / Bibliography file
+% --------------------------------------------------------------------------
+%\addbibresource{Contents/References} % the bib file updates not getting recorded by this command
+\bibliography{Contents/References}
+
+\begin{document}
+
+	
+\frontmatter	% Beginn des Vorspanns / Begin of the prefix
+
+% --------------------------------------------------------------------------
+% 		Deckblatt / Title page
+% --------------------------------------------------------------------------
+\TitlePageIGMR         
+
+% --------------------------------------------------------------------------
+% 		Aufgabenstellung / Issue
+% --------------------------------------------------------------------------
+\IssueIGMR
+
+\ifoot[]{}
+\cfoot[]{}
+\ofoot[]{}
+
+% --------------------------------------------------------------------------
+% 		Eidesstattliche Erklärung / Statutory declaration
+% --------------------------------------------------------------------------
+\DeclarationIGMR
+
+% --------------------------------------------------------------------------
+%		Vorwort / Preface (optional)
+% -------------------------------------------------------------------------- 
+%\input{Template_Student/Preface}
+\cleardoublepage
+
+% --------------------------------------------------------------------------<
+%		Inhaltsverzeichnis / Table of contents
+% -------------------------------------------------------------------------- 
+
+\ihead[]{\headmark}
+\pdfbookmark[1]{\contentsname}{toc}
+\tableofcontents					% Inhaltsverzeichnis / Table of contents
+\cleardoublepage
+
+% --------------------------------------------------------------------------
+%		Formelzeichenverzeichnis / List of symbols 
+% -------------------------------------------------------------------------- 
+\input{Contents/Symbols}			%  Formelzeichenverzeichnis / List of symbols
+\cleardoublepage
+
+% --------------------------------------------------------------------------
+%		Abkuerzungsverzeichnis / List of abbreviations
+% -------------------------------------------------------------------------- 
+\input{Contents/Abbreviations}	% Abkuerzungsverzeichnis / List of abbreviations
+\cleardoublepage
+
+% --------------------------------------------------------------------------
+% 		Inhalt / Contents
+% --------------------------------------------------------------------------
+
+\mainmatter		% Beginn des Hauptteils / Begin of the main body
+\ihead[]{\headmark}
+
+\include{Contents/01-Introduction}	
+
+
+\include{Contents/02-Chapter02}
+
+
+\include{Contents/03-Chapter03}
+
+
+\include{Contents/04-Chapter04}
+
+
+\include{Contents/05-Chapter05}
+
+
+\include{Contents/06-Chapter06}
+
+
+%\include{Contents/98-Summary}
+%\cleardoublepage
+%
+%\include{Contents/99-Outlook}
+%\cleardoublepage
+
+\pagenumbering{Roman}
+% --------------------------------------------------------------------------
+%		Literaturverzeichnis / List of literature	
+% -------------------------------------------------------------------------- 
+\printbibliography[heading=bibintoc]
+%\printbibliography
+
+% --------------------------------------------------------------------------
+%		Tabellenverzeichnis / List of tables
+% -------------------------------------------------------------------------- 
+\listoftables						% Tabellenverzeichnis / List of tables
+\cleardoublepage
+
+% --------------------------------------------------------------------------
+%		Abbildungsverzeichnis / Register of illustrations
+% -------------------------------------------------------------------------- 
+\listoffigures						% Abbildungsverzeichnis / Register of illustrations
+\cleardoublepage
+
+% --------------------------------------------------------------------------
+%		Anhang / Attachment
+%
+%		Der Anhnag enthält weitere Dokumente, welche nicht direkt zur Arbeit
+%		gehören oder aus Platzgründen ausgelagert werden müssen. Die Kapitel
+%		des Anhangs werden mit Großbuchstaben bezeichnet
+%
+%		The attachment contains further documents which are not related to work directly or
+%		had to be outsourced due to a lack of space. The different chapters of the attachment 
+%		are labeled with a captital letter.
+% -------------------------------------------------------------------------- 
+%\appendix
+
+% Inhalt des Anhangs (Beispiel) / List of contents of attachment (Example) 
+%\input{Contents/A-Illustrations}
+%\cleardoublepage
+%\input{Contents/B-Table}
+%\cleardoublepage
+
+% \backmatter
+\end{document}

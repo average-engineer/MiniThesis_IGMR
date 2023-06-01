@@ -1,0 +1,29 @@
+\BOOKMARK [1][-]{toc.1}{Contents}{}% 1
+\BOOKMARK [0][-]{chapter*.3}{Formula symbols and indices}{}% 2
+\BOOKMARK [0][-]{chapter*.8}{List of abbreviations}{}% 3
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 4
+\BOOKMARK [0][-]{chapter.2}{Methodology and Concept}{}% 5
+\BOOKMARK [1][-]{section.2.1}{SAA Simulation Setup}{chapter.2}% 6
+\BOOKMARK [1][-]{section.2.2}{Validation of SAA}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.3}{Loads workflow}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.4}{Control System setup}{chapter.2}% 9
+\BOOKMARK [0][-]{chapter.3}{Initial Controller Design}{}% 10
+\BOOKMARK [1][-]{section.3.1}{Control Objective}{chapter.3}% 11
+\BOOKMARK [1][-]{section.3.2}{Pure Feedforward for Imbalance Compensation}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.3}{Classical Feedback Control}{chapter.3}% 13
+\BOOKMARK [0][-]{chapter.4}{Limitations of SAA}{}% 14
+\BOOKMARK [1][-]{section.4.1}{Neglected Bike Inertia}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.2}{Measurment Noises}{chapter.4}% 16
+\BOOKMARK [0][-]{chapter.5}{Feedback with Feedforward Control \(Pre-control\)}{}% 17
+\BOOKMARK [1][-]{section.5.1}{Motivation}{chapter.5}% 18
+\BOOKMARK [1][-]{section.5.2}{Varying Pre-Control Gains}{chapter.5}% 19
+\BOOKMARK [1][-]{section.5.3}{Eliminating CF Angular Position Feedback}{chapter.5}% 20
+\BOOKMARK [1][-]{section.5.4}{Unactuated Angular Movement of CF}{chapter.5}% 21
+\BOOKMARK [0][-]{chapter.6}{Future Scope and Summary}{}% 22
+\BOOKMARK [1][-]{section.6.1}{Ideal Disturbance Rejection}{chapter.6}% 23
+\BOOKMARK [1][-]{section.6.2}{Modifying application of control forces}{chapter.6}% 24
+\BOOKMARK [1][-]{section.6.3}{Modelling the bike using flexible bodies}{chapter.6}% 25
+\BOOKMARK [1][-]{section.6.4}{Summary}{chapter.6}% 26
+\BOOKMARK [0][-]{chapter*.71}{Bibliography}{}% 27
+\BOOKMARK [0][-]{chapter*.72}{List of Tables}{}% 28
+\BOOKMARK [0][-]{chapter*.73}{List of Figures}{}% 29

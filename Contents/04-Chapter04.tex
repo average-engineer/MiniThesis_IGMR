@@ -1,0 +1,275 @@
+\changefontsizes{20pt}
+\chapter{Limitations of SAA}
+\label{cha:chap4}
+\changefontsizes{12pt}
+Since the basic principle behind SAA is to reduce simulation effort by neglecting the rider and the terrain modelling, it has bound to have some limitations. This chapter focuses on the two main plausible limitations of SAA: \emph{Neglected Bike Inertia} and \emph{Noisy Measurements}.
+
+% --------------------------------------------------------------------------
+% 		Section 4.1
+% --------------------------------------------------------------------------
+\section{Neglected Bike Inertia}
+\label{sec:chap4sec1}
+In the current framework of the simulation setup for SAA, an attempt is made to keep the bike stabilized or fixed in space. In loadcases \emph{Fixed Frame}, \emph{Fixed Fronthub} and \emph{Fixed Rearhub}, some component of the bike is always constrained, thus eliminating any movement which the bike will have during the actual ride. Similarly, in the regulation control system design for the CF bike, the position of bike center of gravity is controlled with respect to a zero reference point. Thus, by limiting the movement of the bike, we are effectively neglecting the inertia of the bike in the real-time ride. The inertia of the rider is already accounted for from the measured loads on the bike. Thus, the neglected bike inertia may be a plausible source of error for the SAA and may help explain the relatively poor validation of loads at points A and C as seen in Chapter \ref{cha:chap3}. In the case that the bike inertia is found to be significant, the control objective can be modified to be a tracking problem, where the CF Bike follows the trajectory followed exactly by the RS Bike \cite{BBJ21,JBB20}. When real-time measurements are used, that would naturally mean additional sensors in order to capture the movement of the bike.
+
+All the simulations seen in Chapter \ref{cha:chap3} were for a rider of 90 Kg, and for a mountain bike, which is often quite light, the bike inertia is pretty negligable compared to the rider inertia. But as the weight of the rider decreases, the contribution of the bike inertia to the total inertia increases, and thus it is prudent to evaluate the performance of SAA for a so-called \emph{worst-case scenario}, where the rider weight is assumed to be 45 kg, which can be attributed to the case when the rider is probably a child/teenager.
+Figure \ref{fig:45KgInert} shows the contribution of the bike inertia to the total inertia, and its comparison with the rider inertia for a $45$ Kg rider. The total mass of the bike frame is taken to be $6.707$ kgs, according to the bike which is modelled in Simpack.
+\begin{figure}[h]
+	\centering
+	\scalebox{1.0}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/InertiaAnalysis/InertiaContribution45Kg}
+	\end{tikzpicture}}
+	\caption{Contribution of Bike Inertia to the total inertia for a 45 Kg Rider.}
+	\label{fig:45KgInert}
+\end{figure}
+
+It can be seen that the bike inertia, even for the worst case is quite small compared to the rider inertia, with the contribution of bike inertia being $12.97$ \%. It should be noted that only the translational inertia is analysed here, since comparing the rotary inertia of the rider and the bike is quite difficult as we do not have an idea about how the rider rides the bicycle and thus how would the mass distribution (mass moment of inertia) of the rider would change with time. Thus, for the following analysis, the inertia of any component of the bike is computed by the multiplication of the component mass by its translational acceleration.
+
+In order to get a better insight into the contribution of the bike inertia, the inertia effects are added to the loads from the CF Bike at points A and C, which were the problem points for PD Control for 90 Kg rider. For point A, the inertia of the Damper is added to the force experienced by the damper from the rearframe, and for point C, the inertia of the rearframe is added to the force experienced by the rearframe from the frontframe. Figures \ref{fig:Damper2Inert} and \ref{fig:RearFrameInert} shows us that the added inertia effect has a negligible effect on the loads experienced at those particular points of the CF Bike. Thus, it would be prudent to conclude that the bike inertia doesn't pose a major limitation, even in the worst-case scenario. In order to verify the conclusion, the CF Bike is excited by the loads coming from a 45 Kg rider on the RS Bike and PD Control is used.
+
+\begin{figure}[h]
+	\centering
+	\scalebox{0.8}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/InertiaAnalysis/InertiaAddDamper2}
+	\end{tikzpicture}}
+	\caption{Added inertia effect to the force experienced by Damper from Rear-frame.}
+	\label{fig:Damper2Inert}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\scalebox{0.8}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/InertiaAnalysis/InertiaAddRearFrame}
+	\end{tikzpicture}}
+	\caption{Added inertia effect to the force experienced by Rear-frame from Front-frame.}
+	\label{fig:RearFrameInert}
+\end{figure}
+
+\subsection*{Classical PD Feedback Control for the worst-case}
+The validation loads errors are tabulated in Tables \ref{tab:pureFeedbkPDA45} to \ref{tab:pureFeedbkPDC45}, and it can be observed that even though the errors increase, the magnitude of change is extremely small.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 8&135&0.95\\ 
+		FY & 99&868&0.01 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point A of CF with PD Control and 45 Kg rider}
+	\label{tab:pureFeedbkPDA45}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 7&15&0.96\\ 
+		FY & 7&2&0.96 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point B of CF with PD Control and 45 Kg rider}
+	\label{tab:pureFeedbkPDB45}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 11&159&0.87\\ 
+		FY & 90&862&0 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point C of CF with PD Control and 45 Kg rider}
+	\label{tab:pureFeedbkPDC45}
+\end{table}
+
+Thus, it can be concluded that the regulation of the CF Bike is enough as a control objective, as the bike inertia is always quite small compared to the rider inertia, and thus neglecting the bike inertia is quite a prudent strategy.
+
+% --------------------------------------------------------------------------
+% 		Section 4.2
+% --------------------------------------------------------------------------
+\section{Measurment Noises}
+\label{sec:chap4sec2}
+
+For all the results in this thesis, the reference data comes from the simulation of the RS Bike, which is quite convenient since we don't have to depend on sensors for measurement of loads. But when real-time sensing of loads is carried out on a real bike, the SAA will need to perform after being excited by the sensor-measured loads. In such a scenario, there will be some measurement noise that is involved in the measured loads. Other sources of noise, like riding on an extremely rough terrain and bad weather conditions can also exist. Thus, SAA should be robust to all these sources of noise. In order to see the effect of a noisy excitation on the current PD Control algorithm of the CF Bike, an artificial noise is generated in the loads from the RS Bike using a random number generator. The generated noise produces an uncertainty of less than to $100$ \% in the excitation value at each time step. Figure \ref{fig:Noise} compares the actual excitations and the noisy excitations.
+
+\begin{figure}[h!]
+	\centering
+	\scalebox{0.6}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Noise/NoisyMeasurement}
+	\end{tikzpicture}}
+	\caption{Noisy Measured Loads with random uncertainties}
+	\label{fig:Noise}
+\end{figure}
+
+\subsection*{PD Controller performance with Measurement Noise}
+
+The loads comparison at point B is shown in Figure \ref{fig:BNoise}, which was the most promising point for the PD Controller. It can be seen that the effect of the noise is transmitted directly to the performance of the controller, which decreases and can be seen from Tables \ref{tab:pureFeedbkPDANoise} to \ref{tab:pureFeedbkPDCNoise} Thus, in order to attenuate the effect of the noise, filtering of the measured loads is attempted.
+
+\begin{figure}[h!]
+	\centering
+	\scalebox{1.0}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Noise/FrontFrameFork}
+	\end{tikzpicture}}
+	\caption{Loads at point B of CF with PD Control and Measurement Noise}
+	\label{fig:BNoise}
+\end{figure}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 45&746&0.63\\ 
+		FY & 134&1527&0 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point A of CF with PD Control and Measurment Noise}
+	\label{tab:pureFeedbkPDANoise}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 46&97&0.62\\ 
+		FY & 46&10&0.62 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point B of CF with PD Control and Measurment Noise}
+	\label{tab:pureFeedbkPDBNoise}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 58&768&0.48\\ 
+		FY & 111&1476&0.02 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point C of CF with PD Control and Measurment Noise}
+	\label{tab:pureFeedbkPDCNoise}
+\end{table}
+
+\subsection*{Low-pass filtering of measured loads}
+A \emph{fourth-order low-pass butterworth filter} is used to filter out the high-frequency noise from the measured loads. A two-way filteration (forward followed by backward) filtering is done in order to ensure that there is no phase shift between the noisy excitations and the filtered excitations. The modified loads workflow is illustrated in Figure \ref{fig:loadswfNF}.
+
+\begin{figure}[h!]
+	\centering
+	\tikzstyle{model}     = [draw, rectangle, minimum height=1cm, minimum width=1.6cm]
+	\tikzstyle{run}     = [draw, diamond, minimum height=1cm, minimum width=1.6cm]
+	\tikzstyle{branch}    = [circle, inner sep=0pt, minimum size=1mm, fill=black, draw=black]
+	\tikzstyle{connector} = [->, thick]
+	\tikzstyle{dummy}     = [inner sep=0pt, minimum size=0pt]
+	\tikzstyle{inout}     = []
+	\tikzstyle{sum}       = [circle, inner sep=0pt, minimum size=2mm, draw=black, thick]
+	\begin{tikzpicture}[auto, node distance=3cm, >=stealth']
+		\node[model] (SL) {Simulation Loads};
+		\node[model] (VL1) [above of = SL] {Validation Loads};
+		\node[run] (r1) [left of = SL,node distance = 5cm] {RUN};
+		\node[model] (RS) [left of = r1]{Roadsurface};
+		\node[model] (noise) [below of = SL]{Artificial Noise};
+		\node[model] (CF) [below of = noise,node distance = 6cm]{Controlled Frame};
+		\path (noise) to [lowpass, name=lpf] (CF);
+		\node[run] (r2) [right of = CF]{RUN};
+		\node[model] (VL2) [right of = r2]{Validation Loads};
+		\node[model,right of = SL,node distance = 6cm] (Val)  {Validation};
+		\node[branch,right of = r1, node distance = 1.4cm] (b1) {};
+		\draw[connector] (RS) -- (r1);
+		\draw[connector] (r1) -- (SL);
+		\draw[connector] (b1) |- node{} (VL1);
+		\draw[connector] (VL1.east) -| node{} (Val.north);
+		\draw[connector] (VL2) -- (Val);
+		\draw[connector] (SL) -- node{Excitations} (noise);
+		\draw[connector] (noise) -- node{Noisy Excitations} (lpf);
+		\draw[connector] (lpf) -- node{Filtered Excitations} (CF);
+		\draw[connector] (CF) -- (r2);
+		\draw[connector] (r2) -- (VL2);
+	\end{tikzpicture}
+	\caption{Loads workflow with noise and filtering}
+	\label{fig:loadswfNF}
+\end{figure}
+
+The choice of the cut-off frequency is critical and should be suitable such that all the high frequency noise is eliminated, but at the same time the low-frequency information is not lost. For instance, for the sampling frequency of $200.1 Hz$ of the excitations ($2001$ data-points in $10$ seconds of simulation time of RS), three cut-off frequencies of $10 Hz, 15 Hz$ and $20 Hz$ are tested, and it is found that for $10 Hz$, the excitations get a little too smooth, thus implying a loss of low-frequency information, while for $20 Hz$, there is still some noise left in the filtered loads. A nice balance is created by $15 Hz$ cut-off and the filtered excitations are compared with the actual unaffected excitations from the RS Bike in Figure \ref{fig:Filter15}. The cut-off frequency will also be use-case dependent; a mountain bike riding through a mountain trail will require a higher cut-off freuquency than a city-bike riding through flat roads.
+
+\begin{figure}[h!]
+	\centering
+	\scalebox{0.6}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Noise/Filtered/FilteredMeasurement15}
+	\end{tikzpicture}}
+	\caption{Noisy Measured Loads passed through a Low-Pass Butterworth Filter (15 Hz Cut-off)}
+	\label{fig:Filter15}
+\end{figure}
+
+
+\subsection*{PD Controller Performance with filtered measured loads}	
+As seen in Figure \ref{fig:BFilter} and Tables \ref{tab:pureFeedbkPDAFilter} to \ref{tab:pureFeedbkPDCFilter}, the validaion improves, but it's still not as good as when the excitations from RS had no noise. Thus, a the performance of SAA will also be determined by how good and prudent the filteration policy is.
+\begin{figure}[h!]
+	\centering
+	\scalebox{0.8}{
+		\begin{tikzpicture}
+			\input{Contents/Resources/Noise/Filtered/FrontFrameFork}
+	\end{tikzpicture}}
+	\caption{Loads at point B of CF with PD Control and Measurement Noise filtered at 15 Hz Cut-off Frequency}
+	\label{fig:BFilter}
+\end{figure}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 19&340&0.88\\ 
+		FY & 103&899&0 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point A of CF with PD Control and Measurment Noise filtered at 15 Hz Cut-off Frequency}
+	\label{tab:pureFeedbkPDAFilter}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 17&41&0.88\\ 
+		FY & 17&4&0.88 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point B of CF with PD Control and Measurment Noise filtered at 15 Hz Cut-off Frequency}
+	\label{tab:pureFeedbkPDBFilter}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c| } 
+		\hline
+		Forces & Mean Error (\%) & RMSE & $R_2$\\ 
+		\hline
+		FX & 25&364&0.79\\ 
+		FY & 61&877&0.06 \\ 
+		\hline
+	\end{tabular}
+	\caption{Load Errors at Point C of CF with PD Control and Measurment Noise filtered at 15 Hz Cut-off Frequency}
+	\label{tab:pureFeedbkPDCFilter}
+\end{table}
+
